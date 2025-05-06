@@ -5,10 +5,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                          branches: [[name: 'origin/main']], // Explicitly specify the branch
+                          branches: [[name: 'origin/main']],
                           doGenerateSubmoduleConfigurations: false,
                           extensions: [],
                           userRemoteConfigs: [[url: 'https://github.com/TOP-J/nodejs-goof.git']]])
+            }
+        }
+        stage('Install Snyk CLI') {
+            steps {
+                sh 'npm install -g snyk'
             }
         }
         stage('Snyk Test') {
