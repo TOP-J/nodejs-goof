@@ -28,11 +28,17 @@ pipeline {
                 sh 'trivy image myapp:latest'
             }
         }
+        stage('Run Application') {
+            steps {
+                sh 'npm start &' // Run in the background. Adjust command if needed.
+                sleep 30          // Give the application some time to start. Adjust as needed.
+            }
+        }
         stage('ZAP Scan') {
             steps {
                 sh 'curl -X GET "http://localhost:8090/JSON/ascan/action/scan/?url=http://localhost:3000"'
             }
         }
-        // Add other stages here
+        // Falco monitoring is assumed to be running separately and will capture events.
     }
 }
