@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        nodejs 'NodeJS 18' // Replace 'NodeJS 18' with the exact name of your configured Node.js installation in Jenkins (in Global Tool Configuration)
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -13,8 +10,10 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/TOP-J/nodejs-goof.git']]])
             }
         }
-        stage('Install Snyk CLI') {
+        stage('Verify Node.js and Install Snyk CLI') {
             steps {
+                sh 'node -v'
+                sh 'npm -v'
                 sh 'npm install -g snyk'
             }
         }
@@ -34,6 +33,6 @@ pipeline {
                 sh 'curl -X GET "http://localhost:8090/JSON/ascan/action/scan/?url=http://localhost:3000"'
             }
         }
-        // Add other stages here (e.g., for Falco monitoring setup if needed)
+        // Add other stages here
     }
 }
